@@ -60,6 +60,9 @@ void loop() {
           myservo.write(10);
           delay(150);
           myservo.write(10);
+          delay(150);
+          myservo.write(10);
+          delay(150);
           HC12.write("...Running program 0: closing valve ");
           delay(1000);    //delay in ms needed for max close time under load
           HC12.write(" done...");
