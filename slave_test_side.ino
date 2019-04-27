@@ -1,6 +1,10 @@
 /*
  * this is the program to run on the 'slave' arduino
  * 
+ * to use connect to blue usb from master arduino and open serial monitor
+ * 
+ * enter the desired program number in the serial monitor
+ * 
  * Connect HC12 "RXD" pin to Arduino Digital Pin 4
  * Connect HC12 "TXD" pin to Arduino Digital Pin 5
  * Connect HC12 "Set" pin to Arduino Digital Pin 6
