@@ -100,6 +100,8 @@ void loop() {
       switch(program){
         case '0':   // program zero = default close valve
                     // good for both savox valves!
+          HC12.println(" system test...");
+          getPressure();          
           openLBV();
           delay(1000);
           openSTFV();
@@ -107,9 +109,7 @@ void loop() {
           openFTFV();
           delay(1000);
           openRV();
-          break;
-        case '1':   //program one = open
-                    // good for both savox values FTFV & RV
+          delay(500);
           closeLBV();
           delay(1000);
           closeSTFV();
@@ -117,32 +117,67 @@ void loop() {
           closeFTFV();
           delay(1000);
           closeRV();
-          break;
-        case '2': //program two = get load cell data
+          getPressure();
+          HC12.println(" done...");
           
+          break;
+        case '1':   //program one = open
+          HC12.println(" Running fill program...");         // good for both savox values FTFV & RV
+          openSTFV();
+          getPressure();
+          openFTFV();
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          closeFTFV();
+          closeSTFV();
+          getPressure();
+          HC12.println(" done...");
+          break;
+        case '2':
+          getPressure();
+          openRV();
+          getPressure(); //getPressure takes 1 second to function
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          getPressure();
+          closeRV();
+          HC12.println(" done...");
+           break;
+         case 'r': // report pressure data
             // check pressure sensor
             // this needs fixed
             // ambient raw 100~98 = 0psi
             // 211 = 144psi
             // 208 = 138psi
             // 206 = 136psi
-            for(int i=0; i<10; ++i){
-              byte raw = analogRead(pressurePin);
-              delay(100);
-              HC12.print(" raw: ");
-              HC12.println(raw);
-              
-              Serial.print("raw:  ");
-              Serial.println(raw);
-              delay(100);
-            }
+           getPressure();
            break;
-         case '3': // LBV (should also be used to test STFV!)
-          openRV();
-          break;
         case '4': //STFV
           closeRV();
           break;
+        case '5':
+          openRV();
+          break;
+        case '6':
+          
+          break;
+        case 'a': //abort
+          HC12.println(" abort-purge system...");
+          closeSTFV();
+          closeRV();
+          closeFTFV();
+          openLBV();
+          getPressure();
+          getPressure();
       }
     
   }
@@ -278,3 +313,26 @@ void closeRV(){
           delay(150);
           HC12.write(" RV closed..."); 
 }
+void getPressure(){
+  HC12.println(" reading pressure data... ");
+            for(int i=0; i<10; ++i){
+              byte raw = analogRead(pressurePin);
+              int rawfull = analogRead(pressurePin);
+              byte calc = raw*1.27 - 125;
+              delay(100);
+              HC12.print(" raw: ");
+              HC12.print(raw);
+              HC12.print(" rawfull: ");
+              HC12.print(rawfull);
+              HC12.print(" calc: ");
+              HC12.println(calc);
+              Serial.print("raw:  ");
+              Serial.print(raw);
+              Serial.print("rawfull:  ");
+              Serial.print(rawfull);
+              Serial.print(" calc ");
+              Serial.println(calc);
+              
+            }
+}
+
